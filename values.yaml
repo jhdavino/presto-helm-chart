@@ -1,0 +1,80 @@
+# Default values for presto-test.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: prestosql/presto
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: 344
+
+podAnnotations: {}
+fullnameOverride: ""
+nameOverride: ""
+
+server:
+  workers: 0
+  node:
+    environment: forno
+    dataDir: /data/presto
+  log:
+    presto:
+      level: ERROR
+  config:
+    path: /usr/lib/presto/etc
+    http:
+      port: 8080
+    query:
+      maxMemory: "3GB"
+      maxMemoryPerNode: "1GB"
+      maxTotalMemory: "6GB"
+      maxTotalMemoryPerNode: "2GB"
+  jvm:
+    maxHeapSize: "8G"
+    gcMethod:
+      type: "UseG1GC"
+      g1:
+        heapRegionSize: "32M"
+
+service:
+  type: ClusterIP
+  port: 80
+
+connectors:
+  hive.properties: |-
+    connector.name=hive-hadoop2
+    hive.metastore.uri=thrift://<hive-ip>:9083
+  # Connectors configuration usually contains sensitive data (like passwords, usernames, ...)
+  # so data is stored in a secret
+  # mysql.properties: |-
+  #   connector.name=mysql
+  #   connection-url=jdbc:mysql://mysqlserver:3306
+  #   connection-user=mysqluser
+  #   connection-password=mysqlpassword
+  # elk.properties: |-
+  #   connector.name=elasticsearch
+  #   elasticsearch.host=elasticsearchserver
+  #   elasticsearch.port=9200
+  #   elasticsearch.default-schema-name=default
+  #   elasticsearch.security=PASSWORD
+  #   elasticsearch.auth.user=elastiuser
+  #   elasticsearch.auth.password=elasticpassword
+  #   elasticsearch.tls.enabled=true
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
