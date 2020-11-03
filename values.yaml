@@ -13,24 +13,25 @@ fullnameOverride: ""
 nameOverride: ""
 
 server:
-  workers: 0
+  workers: 2
   node:
     environment: forno
     dataDir: /data/presto
+    pluginDir: /usr/lib/presto/plugin
   log:
     presto:
-      level: ERROR
+      level: INFO
   config:
     path: /usr/lib/presto/etc
     http:
       port: 8080
     query:
-      maxMemory: "3GB"
+      maxMemory: "50GB"
       maxMemoryPerNode: "1GB"
       maxTotalMemory: "6GB"
       maxTotalMemoryPerNode: "2GB"
   jvm:
-    maxHeapSize: "8G"
+    maxHeapSize: "16G"
     gcMethod:
       type: "UseG1GC"
       g1:
@@ -38,7 +39,6 @@ server:
 
 service:
   type: ClusterIP
-  port: 80
 
 connectors:
   hive.properties: |-
