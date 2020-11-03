@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels:
       app: {{ template "presto.name" . }}
+      release: {{ .Release.Name }}
       component: coordinator
   template:
     metadata:
@@ -43,10 +44,12 @@ spec:
             httpGet:
               path: /v1/status
               port: http-coord
+            initialDelaySeconds: 40
           readinessProbe:
             httpGet:
               path: /v1/status
               port: http-coord
+            initialDelaySeconds: 40
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}

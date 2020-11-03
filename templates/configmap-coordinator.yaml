@@ -6,11 +6,13 @@ metadata:
     app: {{ template "presto.name" . }}
     chart: {{ template "presto.chart" . }}
     release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
     component: coordinator
 data:
   node.properties: |
     node.environment={{ .Values.server.node.environment }}
     node.data={{ .Values.server.node.dataDir }}
+    plugin.dir={{ .Values.server.node.pluginDir }}
 
   jvm.config: |
     -server
